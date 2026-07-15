@@ -236,14 +236,93 @@
     <!-- 6. Controlador principal (depende de todos os anteriores) -->
     <script src="js/main.js"></script>
 
-    <!-- Google tag (gtag.js) -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-5PCJJVWP21"></script>
-    <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
+    <!-- ==================================================================
+         Cookie Consent (LGPD / Google Analytics)
+         ================================================================== -->
+    <div class="cookie-consent" id="cookie-consent">
+        <div class="cookie-consent-content">
+            <div class="cookie-consent-icon">🍪</div>
+            <div class="cookie-consent-text">
+                <strong>Este site usa cookies</strong>
+                <p>Utilizamos o Google Analytics para entender como você interage com o site e melhorar sua experiência. Seus dados são anônimos e não compartilhamos com terceiros. Veja nossa <a href="https://policies.google.com/privacy" target="_blank" rel="noopener">Política de Privacidade</a>.</p>
+            </div>
+            <div class="cookie-consent-actions">
+                <button id="cookie-accept" class="btn btn-primary btn-sm">✅ Aceitar</button>
+                <button id="cookie-reject" class="btn btn-secondary btn-sm">❌ Recusar</button>
+            </div>
+        </div>
+    </div>
 
-    gtag('config', 'G-5PCJJVWP21');
+    <!-- Google Analytics — carregado somente após consentimento -->
+    <script>
+    (function() {
+        var GA_ID = 'G-5PCJJVWP21';
+        var STORAGE_KEY = 'wyd_ga_consent';
+        var banner = document.getElementById('cookie-consent');
+
+        function loadGA() {
+            var script = document.createElement('script');
+            script.async = true;
+            script.src = 'https://www.googletagmanager.com/gtag/js?id=' + GA_ID;
+            document.head.appendChild(script);
+
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', GA_ID);
+        }
+
+        function hideBanner() {
+            if (banner) {
+                banner.classList.add('cookie-consent--hidden');
+                // Remove do DOM após a animação
+                setTimeout(function() {
+                    if (banner.parentNode) banner.parentNode.removeChild(banner);
+                }, 400);
+            }
+        }
+
+        // Verifica consentimento salvo
+        var saved = localStorage.getItem(STORAGE_KEY);
+
+        if (saved === 'accepted') {
+            loadGA();
+            hideBanner();
+        } else if (saved === 'rejected') {
+            hideBanner();
+        }
+        // Se não houver consentimento salvo, o banner permanece visível
+
+        // Handlers dos botões
+        document.getElementById('cookie-accept').addEventListener('click', function() {
+            localStorage.setItem(STORAGE_KEY, 'accepted');
+            loadGA();
+            hideBanner();
+        });
+
+        document.getElementById('cookie-reject').addEventListener('click', function() {
+            localStorage.setItem(STORAGE_KEY, 'rejected');
+            hideBanner();
+        });
+
+        // Botão de revisão de privacidade no footer
+        var footer = document.querySelector('.app-footer');
+        if (footer && !footer.querySelector('.privacy-review')) {
+            var privacyLink = document.createElement('p');
+            privacyLink.className = 'privacy-review';
+            privacyLink.style.marginTop = '4px';
+            privacyLink.style.fontSize = '0.7rem';
+            var reviewBtn = document.createElement('button');
+            reviewBtn.textContent = '🍪 Revisar cookies';
+            reviewBtn.style.cssText = 'background:none;border:none;color:var(--text-muted);cursor:pointer;font-family:inherit;font-size:0.7rem;text-decoration:underline;padding:0;';
+            reviewBtn.addEventListener('click', function() {
+                localStorage.removeItem(STORAGE_KEY);
+                location.reload();
+            });
+            privacyLink.appendChild(reviewBtn);
+            footer.appendChild(privacyLink);
+        }
+    })();
     </script>
 
 </body>

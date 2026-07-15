@@ -1163,6 +1163,120 @@ select.type-hitrate option[value="hitrate"]  { color: var(--color-hitrate); }
 .hidden { display: none !important; }
 
 /* ==========================================================================
+   Cookie Consent Banner (LGPD / Google Analytics)
+   ========================================================================== */
+
+.cookie-consent {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 999;
+    background: var(--bg-secondary);
+    border-top: 2px solid var(--gold-border);
+    box-shadow: 0 -4px 24px rgba(0, 0, 0, 0.5);
+    padding: var(--space-md) var(--space-lg);
+    animation: cookieSlideUp 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: opacity var(--transition-slow), transform var(--transition-slow);
+}
+
+.cookie-consent--hidden {
+    opacity: 0;
+    transform: translateY(100%);
+    pointer-events: none;
+}
+
+.cookie-consent-content {
+    max-width: 1100px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    gap: var(--space-md);
+    flex-wrap: wrap;
+}
+
+.cookie-consent-icon {
+    font-size: 1.8rem;
+    flex-shrink: 0;
+    animation: pulse 2s infinite;
+}
+
+.cookie-consent-text {
+    flex: 1;
+    min-width: 200px;
+}
+
+.cookie-consent-text strong {
+    color: var(--gold);
+    font-size: 0.9rem;
+    display: block;
+    margin-bottom: 2px;
+}
+
+.cookie-consent-text p {
+    color: var(--text-secondary);
+    font-size: 0.8rem;
+    line-height: 1.5;
+    margin: 0;
+}
+
+.cookie-consent-text a {
+    color: var(--blue);
+    text-decoration: underline;
+    transition: color var(--transition);
+}
+
+.cookie-consent-text a:hover {
+    color: var(--gold-light);
+}
+
+.cookie-consent-actions {
+    display: flex;
+    gap: var(--space-sm);
+    flex-shrink: 0;
+}
+
+@keyframes cookieSlideUp {
+    from {
+        opacity: 0;
+        transform: translateY(100%);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Ajuste para não sobrepor o banner em dispositivos móveis */
+@media (max-width: 600px) {
+    .cookie-consent {
+        padding: var(--space-md);
+    }
+
+    .cookie-consent-content {
+        flex-direction: column;
+        text-align: center;
+        gap: var(--space-sm);
+    }
+
+    .cookie-consent-actions {
+        width: 100%;
+        justify-content: center;
+    }
+}
+
+@media (max-width: 380px) {
+    .cookie-consent-actions {
+        flex-direction: column;
+        width: 100%;
+    }
+
+    .cookie-consent-actions .btn {
+        width: 100%;
+    }
+}
+
+/* ==========================================================================
    Print Styles
    ========================================================================== */
 
@@ -1177,7 +1291,9 @@ select.type-hitrate option[value="hitrate"]  { color: var(--color-hitrate); }
     .debug-panel,
     .history-section,
     .app-footer,
-    .modal-overlay {
+    .modal-overlay,
+    .cookie-consent,
+    .privacy-review {
         display: none !important;
     }
 
