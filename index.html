@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="WYD +10 Simulator — Simulador de composição de armas Ancient +10 do WYD Global">
+    <meta name="theme-color" content="#0d1117">
+
+    <title>WYD +10 Simulator</title>
+
+    <!-- Stylesheet -->
+    <link rel="stylesheet" href="css/style.css">
+
+    <!-- Favicon (emoji como fallback) -->
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚔️</text></svg>">
+</head>
+<body>
+
+    <!-- ==================================================================
+         App Container
+         ================================================================== -->
+    <div class="app-container">
+
+        <!-- ==============================================================
+             Header
+             ============================================================== -->
+        <header class="app-header">
+            <h1 class="app-title">⚔️ WYD +10 Simulator</h1>
+            <p class="app-subtitle">Simulador de Composição de Armas Ancient</p>
+        </header>
+
+        <!-- ==============================================================
+             Weapons Section
+             ============================================================== -->
+        <section class="weapons-grid" id="weapons-section">
+
+            <!-- Arma A -->
+            <div class="weapon-card weapon-a">
+                <div class="weapon-card-header">
+                    <span class="weapon-card-icon">⚔️</span>
+                    <span class="weapon-card-title">Arma A</span>
+                </div>
+
+                <!-- ADD 1 -->
+                <div class="add-slot">
+                    <div class="add-slot-label">ADD 1</div>
+                    <div class="add-slot-controls">
+                        <select id="weapon-a-type-1" aria-label="Tipo do ADD 1 — Arma A"></select>
+                        <select id="weapon-a-value-1" aria-label="Valor do ADD 1 — Arma A"></select>
+                    </div>
+                </div>
+
+                <!-- ADD 2 -->
+                <div class="add-slot">
+                    <div class="add-slot-label">ADD 2</div>
+                    <div class="add-slot-controls">
+                        <select id="weapon-a-type-2" aria-label="Tipo do ADD 2 — Arma A"></select>
+                        <select id="weapon-a-value-2" aria-label="Valor do ADD 2 — Arma A"></select>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Arma B -->
+            <div class="weapon-card weapon-b">
+                <div class="weapon-card-header">
+                    <span class="weapon-card-icon">🗡️</span>
+                    <span class="weapon-card-title">Arma B</span>
+                </div>
+
+                <!-- ADD 1 -->
+                <div class="add-slot">
+                    <div class="add-slot-label">ADD 1</div>
+                    <div class="add-slot-controls">
+                        <select id="weapon-b-type-1" aria-label="Tipo do ADD 1 — Arma B"></select>
+                        <select id="weapon-b-value-1" aria-label="Valor do ADD 1 — Arma B"></select>
+                    </div>
+                </div>
+
+                <!-- ADD 2 -->
+                <div class="add-slot">
+                    <div class="add-slot-label">ADD 2</div>
+                    <div class="add-slot-controls">
+                        <select id="weapon-b-type-2" aria-label="Tipo do ADD 2 — Arma B"></select>
+                        <select id="weapon-b-value-2" aria-label="Valor do ADD 2 — Arma B"></select>
+                    </div>
+                </div>
+            </div>
+
+        </section>
+
+        <!-- ==============================================================
+             Actions Bar
+             ============================================================== -->
+        <div class="actions-bar">
+            <button id="btn-calculate" class="btn btn-primary">
+                ⚡ Calcular
+            </button>
+
+            <input type="number"
+                   id="simulation-iterations"
+                   value="100000"
+                   min="1000"
+                   max="1000000"
+                   step="1000"
+                   style="width: 100px;"
+                   aria-label="Número de iterações"
+                   title="Número de iterações da simulação">
+
+            <button id="btn-simulate" class="btn btn-secondary">
+                🎲 Simular
+            </button>
+
+            <button id="btn-export" class="btn btn-secondary">
+                📤 Exportar JSON
+            </button>
+
+            <button id="btn-import" class="btn btn-secondary">
+                📥 Importar JSON
+            </button>
+        </div>
+
+        <!-- ==============================================================
+             Results Section
+             ============================================================== -->
+        <section class="results-section" id="results-section">
+            <h2 class="results-header">📊 Resultados da Composição</h2>
+
+            <!-- ADDs Internos -->
+            <div id="internal-adds"></div>
+
+            <!-- Combinações -->
+            <h3 style="color: var(--text-secondary); font-size: 0.85rem; text-transform: uppercase; letter-spacing: 1px; margin: var(--space-lg) 0 var(--space-sm);">
+                🔗 Combinações Possíveis
+            </h3>
+            <div class="combinations-list" id="combinations-list"></div>
+
+            <!-- Resultados Finais -->
+            <h3 style="color: var(--text-secondary); font-size: 0.85rem; text-transform: uppercase; letter-spacing: 1px; margin: var(--space-lg) 0 var(--space-sm);">
+                🏆 Resultados Finais
+            </h3>
+            <div class="final-results" id="final-results"></div>
+
+            <!-- Árvore Visual -->
+            <h3 style="color: var(--text-secondary); font-size: 0.85rem; text-transform: uppercase; letter-spacing: 1px; margin: var(--space-lg) 0 var(--space-sm);">
+                🌳 Árvore de Composição
+            </h3>
+            <div class="tree-container" id="tree-container"></div>
+        </section>
+
+        <!-- ==============================================================
+             Simulation Distribution
+             ============================================================== -->
+        <section class="simulation-section" id="simulation-section">
+            <h2 class="results-header">📈 Distribuição da Simulação</h2>
+            <p style="color: var(--text-secondary); font-size: 0.85rem; margin-bottom: var(--space-md);">
+                Resultados após <span id="sim-count-display" style="color: var(--gold); font-weight: 700;">100.000</span> iterações.
+                Cada resultado possível tem probabilidade teórica igual.
+            </p>
+            <div class="distribution-chart" id="distribution-chart"></div>
+            <div class="tree-container" id="tree-container-sim" style="margin-top: var(--space-lg);"></div>
+        </section>
+
+        <!-- ==============================================================
+             Debug Panel
+             ============================================================== -->
+        <div class="debug-toggle">
+            <input type="checkbox" id="debug-checkbox" aria-label="Ativar modo debug">
+            <label for="debug-checkbox" class="debug-toggle-label">🐛 Modo Debug</label>
+        </div>
+
+        <div class="debug-panel" id="debug-panel">
+            <pre id="debug-content"></pre>
+        </div>
+
+        <!-- ==============================================================
+             History Section
+             ============================================================== -->
+        <section class="history-section">
+            <div class="history-header">
+                <h2 class="history-title">📜 Histórico de Simulações</h2>
+                <button id="btn-clear-history" class="btn btn-danger btn-sm">
+                    🗑️ Limpar Histórico
+                </button>
+            </div>
+            <div class="history-list" id="history-list"></div>
+        </section>
+
+        <!-- ==============================================================
+             Footer
+             ============================================================== -->
+        <footer class="app-footer">
+            <p>WYD +10 Simulator v1.0.0 — Ferramenta não oficial para a comunidade WYD</p>
+            <p style="margin-top: 2px; font-size: 0.7rem;">⚔️ WYD Global</p>
+        </footer>
+
+    </div>
+
+    <!-- ==================================================================
+         Modal (Export/Import)
+         ================================================================== -->
+    <div class="modal-overlay" id="modal-overlay">
+        <div class="modal">
+            <h3 class="modal-title" id="modal-title">Exportar JSON</h3>
+            <textarea class="modal-textarea" id="modal-textarea" readonly></textarea>
+            <div class="modal-actions">
+                <button id="modal-cancel" class="btn btn-secondary">Cancelar</button>
+                <button id="modal-action" class="btn btn-primary">Copiar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ==================================================================
+         Toast Container
+         ================================================================== -->
+    <div id="toast-container"></div>
+
+    <!-- ==================================================================
+         Scripts (ordem de dependência é importante!)
+         ================================================================== -->
+
+    <!-- 1. Tabelas de atributos (sem dependências) -->
+    <script src="js/tables.js"></script>
+
+    <!-- 2. Utilitários (depende de tables.js para TYPE_LABELS) -->
+    <script src="js/utils.js"></script>
+
+    <!-- 3. Algoritmo de composição (depende de tables.js e utils.js) -->
+    <script src="js/algorithm.js"></script>
+
+    <!-- 4. Simulador (depende de algorithm.js) -->
+    <script src="js/simulator.js"></script>
+
+    <!-- 5. Storage (independente) -->
+    <script src="js/storage.js"></script>
+
+    <!-- 6. Controlador principal (depende de todos os anteriores) -->
+    <script src="js/main.js"></script>
+
+</body>
+</html>
